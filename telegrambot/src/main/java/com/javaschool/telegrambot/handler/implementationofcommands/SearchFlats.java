@@ -12,7 +12,13 @@ import com.javaschool.telegrambot.service.ReplyMessageService;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,8 +32,20 @@ public class SearchFlats implements MessageHandler {
     private final BotConditionContext userDataCache;
     private final ReplyMessageService replyMessageService;
     private  final UserInfo info;
-    @Value("http://rest-api-server/user/save")
+    @Value("http://rest-api-server/person/save")
     private String url;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
 
     public SearchFlats(BotConditionContext userDataCache, ReplyMessageService replyMessageService, UserInfo info) {
         this.userDataCache = userDataCache;
@@ -66,27 +84,21 @@ public class SearchFlats implements MessageHandler {
     }
 
 
-    private void sendRequest(Person pers) {
+    @SneakyThrows
+    private void sendRequest(Person person) {
         // HttpHeaders
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        RestTemplate restTemplate = new RestTemplate();
-
         // Data attached to the request.
-        HttpEntity<Person> requestBody = new HttpEntity<>(pers, headers);
+        HttpEntity<Person> requestBody = new HttpEntity<>(person, headers);
 
         // Send request with POST method.
-        System.out.printf(url + '\n');
-        Person e = restTemplate.postForObject(url, requestBody, Person.class);
+        System.out.println(objectMapper.writeValueAsString(person));
+        String response = restTemplate.postForObject(url, requestBody, String.class);
 
-        if (e != null) {
-            System.out.println("Person saved");
-        } else {
-            System.out.println("Something error!");
-        }
-
+        System.out.println("response = " + response);
     }
 
 

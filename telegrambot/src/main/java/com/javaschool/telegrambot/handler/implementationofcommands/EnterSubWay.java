@@ -30,7 +30,8 @@ public class EnterSubWay implements MessageHandler {
     public SendMessage handle(Message message) {
         Long chatId = message.getChatId();
         int userId = Math.toIntExact(message.getFrom().getId());
-        List<String> subways = Arrays.asList(message.getText().split(","));
+//        List<String> subways = Arrays.asList(message.getText().split(","));
+        String subways = message.getText();
         List<Criterion> crit = info.getUserCriterionData(userId);
         crit.get(crit.size() - 1).setSubway(subways);
         userDataCache.setCurrentBotConditionForUserWithId(userId, BotCondition.GET_FLATS);

@@ -27,10 +27,9 @@ public class ProcessingUpdates {
 
     public PartialBotApiMethod<? extends Serializable> handleUpdate(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            System.out.printf("Zashel\n");
             Message message = update.getMessage();
             BotCondition botCondition1 = getBotCondition1(message);
-//            BotCondition botCondition = getBotCondition(message);
+
             log.info(
                     "Message from: {}; " +
                             "chat id: {};  " +
@@ -41,8 +40,6 @@ public class ProcessingUpdates {
                     message.getText(),
                     botCondition1
             );
-            System.out.printf("Состояние бота1 = " + botCondition1 + '\n');
-//            System.out.printf("Состояние бота =  " + botCondition + '\n');
 
             return botConditionHandler.handleTextMessageByCondition(message, botCondition1);
         }

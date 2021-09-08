@@ -10,5 +10,5 @@ import java.util.List;
 public class Criterion {
     double startValue;
     double endValue;
-    List<String> subway;
+    String subway;
 }

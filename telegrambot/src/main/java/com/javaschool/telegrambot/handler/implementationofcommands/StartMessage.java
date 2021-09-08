@@ -46,7 +46,7 @@ public class StartMessage implements MessageHandler {
         userDataCache.setCurrentBotConditionForUserWithId(userId, BotCondition.SET_PRICE);
         ReplyKeyboardMarkupBuilder builder = ReplyKeyboardMarkupBuilder.create(chatId);
         builder.setText("Добро пожаловать! "
-                + "\n\nДля просмотра квартиры введите нужную вам цену(пример ввода 3456-789)");
+                + "\n\nДля просмотра квартиры введите нужную вам цену(пример ввода 20000-70000)");
         for (MessageHandler handler : handlers) {
             BotCommand annotation = handler.getClass().getAnnotation(BotCommand.class);
             String description = annotation.command()[0].getDescription();

@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,7 +27,7 @@ public class KafkaTransportService {
     @Scheduled(cron = "*/30 * * * * *")
     public void TransferJsonArrayToKafka() {
         List<Advertisement> advertisements = extractorService.extract();
-        System.out.println("Iteration");
+        System.out.println(LocalDateTime.now());
         if (!advertisements.isEmpty()) {
             System.out.println("advertisements = " + advertisements);
             advertisements.forEach(ad -> kafkaTemplate.send(KafkaConfiguration.TOPIC, ad));

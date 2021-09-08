@@ -15,6 +15,7 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@RequestBody Person person) {
+        System.out.println("person to save = " + person.toString());
         personService.savePerson(person);
         return "saved";
     }

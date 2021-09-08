@@ -6,6 +6,9 @@ import com.javaschool.restapiserver.models.Person;
 import com.javaschool.restapiserver.services.AdvertisementWrapperService;
 import com.javaschool.restapiserver.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,6 +24,15 @@ public class AdvertisementRestSender implements RestSender {
     @Autowired
     AdvertisementWrapperService advertisementWrapperService;
 
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
+
     @Override
     public void postRequest(Advertisement advertisement) {
         // HttpHeaders
@@ -28,10 +40,14 @@ public class AdvertisementRestSender implements RestSender {
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        RestTemplate restTemplate = new RestTemplate();
+        AdvertisementWrapper advertisementWrapper = advertisementWrapperService.createWrapper(advertisement);
 
-        // Data attached to the request.
-        HttpEntity<AdvertisementWrapper> requestBody = new HttpEntity<>(advertisementWrapperService.createWrapper(advertisement), headers);
+        if (advertisementWrapper.getChatIds().isEmpty()) {
+            System.out.println("Unclaimed advertisement:" + advertisement.toString());
+            return;
+        }
+
+        HttpEntity<AdvertisementWrapper> requestBody = new HttpEntity<>(advertisementWrapper, headers);
 
         System.out.println("advertisement = " + advertisement);
 

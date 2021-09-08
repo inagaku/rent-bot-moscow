@@ -54,7 +54,8 @@ public class EnterPrice implements MessageHandler {
         }
 
 
-        return replyMessageService.getTextMessage(chatId, "Цена принята \nВведите нужные станции метро или поставте 0, если этот критерий не нужен:");
+//        return replyMessageService.getTextMessage(chatId, "Цена принята \nВведите нужные станции метро или поставте 0, если этот критерий не нужен:");
+        return replyMessageService.getTextMessage(chatId, "Цена принята \nВведите нужные станции метро");
     }
 
 

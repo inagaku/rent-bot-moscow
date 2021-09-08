@@ -7,14 +7,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import com.javaschool.telegrambot.service.ReplyMessageService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,6 +38,8 @@ public class MyApartmentBot extends TelegramLongPollingBot {
         this.updateReceiver = updateReceiver;
     }
 
+    @Autowired
+    ReplyMessageService replyMessageService;
     /* Перегружаем метод интерфейса LongPollingBot
     Теперь при получении сообщения наш бот будет отвечать сообщением Hi!
      */
@@ -68,9 +73,11 @@ public class MyApartmentBot extends TelegramLongPollingBot {
         List<Long> chatsId = wrap.getChatIds();
         ObjectMapper objectMapper = new ObjectMapper();
         Advertisement add = wrap.getAdvertisement();
-        System.out.printf("12345");
+
         String text = makePrettyString(add);
         for (Long chatId : chatsId) {
+//            SendPhoto sendPhoto = replyMessageService.getTextMessageWithImage(chatId, text, add.getImages().split(",")[0]);
+
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(String.valueOf(chatId));
             sendMessage.setText(text);
@@ -80,10 +87,21 @@ public class MyApartmentBot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public String makePrettyString(Advertisement add) {
-        String pretty = add.getUrl() + "\n" + add.getAddress() + "\n" + add.getArea() + "м2" + "\n" + add.getImages().split(",")[0] + "\n" + add.getDescription() + '\n' + "комнат:" + add.getRoomsCount();
+        String pretty = add.getUrl() + "\n"
+                + add.getAddress() + "\n"
+                + add.getArea() + "м2" + "\n"
+                + "Комнат:" + add.getRoomsCount() + "\n\n"
+                + add.getMetro() + "\n\n"
+                + add.getDescription() + "\n\n"
+                + add.getImages().split(",")[0];
         return pretty;
     }
 

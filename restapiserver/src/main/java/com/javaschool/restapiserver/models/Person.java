@@ -11,9 +11,6 @@ import javax.persistence.*;
 @Table(name = "persons", schema="public")
 public class Person {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    Integer id;
-//
     @Column(name = "id")
     int userId;
 
