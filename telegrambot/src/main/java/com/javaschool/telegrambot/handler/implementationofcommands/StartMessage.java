@@ -16,13 +16,14 @@ import java.util.List;
 
 @BotCommand(command = Commands.START)
 public class StartMessage implements MessageHandler {
-    @Autowired
+
     private BotConditionContext userDataCache;
 
     private final ReplyMessageService replyMessageService;
     private final List<MessageHandler> handlers;
 
-    public StartMessage(ReplyMessageService replyMessageService, List<MessageHandler> handlers) {
+    public StartMessage(BotConditionContext userDataCache, ReplyMessageService replyMessageService, List<MessageHandler> handlers) {
+        this.userDataCache = userDataCache;
 
         this.replyMessageService = replyMessageService;
         this.handlers = handlers;
@@ -45,14 +46,9 @@ public class StartMessage implements MessageHandler {
         userDataCache.setCurrentBotConditionForUserWithId(userId, BotCondition.SET_PRICE);
         ReplyKeyboardMarkupBuilder builder = ReplyKeyboardMarkupBuilder.create(chatId);
         builder.setText("Добро пожаловать! "
-                + "\n\nЧтобы воспользоваться моим функционалом, нажмите нужную кнопку на появившейся клавиатуре. "
-                + Emoji.MENU);
-        System.out.printf("Start!!!!!!\n");
-        System.out.printf(String.valueOf(handlers.stream().count()));
+                + "\n\nДля просмотра квартиры введите нужную вам цену(пример ввода 3456-789)");
         for (MessageHandler handler : handlers) {
             BotCommand annotation = handler.getClass().getAnnotation(BotCommand.class);
-            System.out.printf(String.valueOf(annotation) + '\n');
-            Commands command = annotation.command()[0];
             String description = annotation.command()[0].getDescription();
             if (!description.isEmpty()) {
                 builder.row()
@@ -77,7 +73,6 @@ public class StartMessage implements MessageHandler {
                 .button("Помощь")
                 .endRow()
                 .build();*/
-
     }
 
 }
