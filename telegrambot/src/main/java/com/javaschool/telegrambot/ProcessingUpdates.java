@@ -58,31 +58,6 @@ public class ProcessingUpdates {
         }
     }
 
-
-/*    private BotCondition getBotCondition(Message message) {
-        Integer userId = Math.toIntExact(message.getFrom().getId());
-        String userTextMessage = message.getText();
-        BotCondition botCondition;
-
-        switch (userTextMessage) {
-            case "/start":
-                botCondition = BotCondition.START;
-                break;
-            case "Помощь":
-                botCondition = BotCondition.HELP;
-                break;
-            case "Введите цену квартиры(формат start-end)":
-                botCondition = BotCondition.GET_PRICE;
-                break;
-            case "Введите метро":
-                botCondition = BotCondition.GET_SUBWAY;
-                break;
-            default:
-                botCondition = botConditionUserContext.getCurrentBotConditionForUserById(userId);
-        }
-        botConditionUserContext.setCurrentBotConditionForUserWithId(userId, botCondition);
-        return botCondition;
-    }*/
     protected BotCondition getBotCondition1(Message message) {
         Integer userId = Math.toIntExact(message.getFrom().getId());
         String text = message.getText();

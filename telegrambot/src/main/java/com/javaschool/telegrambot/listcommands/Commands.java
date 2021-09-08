@@ -1,10 +1,10 @@
 package com.javaschool.telegrambot.listcommands;
 
 public enum Commands {
-    START_FILLING("Начать задавать"),
-    SET_PRICE("Задать цену"),
-    SET_LOCATION("Задать Метро"),
-    GET_APARTMENT("Поиск"),
+    START_FILLING(""),
+    SET_PRICE(""),
+    SET_LOCATION(""),
+    GET_APARTMENT(""),
     HELP("HELP"),
     START("START");
 

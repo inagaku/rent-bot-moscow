@@ -37,9 +37,13 @@ public class SearchFlats implements MessageHandler {
 
     @Override
     public SendMessage handle(Message message) {
-        ObjectMapper objectMapper = new ObjectMapper();
         Long chatId = message.getChatId();
         int userId = Math.toIntExact(message.getFrom().getId());
+        if (message.getText().equals("Нет")) {
+            userDataCache.setCurrentBotConditionForUserWithId(userId, BotCondition.SET_PRICE);
+            return replyMessageService.getTextMessage(chatId, "Добавте новый критерий поиска квартир");
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
         for (Criterion crit:info.getUserCriterionData(userId)) {
             try {
                 System.out.printf(objectMapper.writeValueAsString(crit));

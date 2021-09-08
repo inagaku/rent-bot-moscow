@@ -32,6 +32,9 @@ public class EnterPrice implements MessageHandler {
         Long chatId = message.getChatId();
         int userId = Math.toIntExact(message.getFrom().getId());
         List<String> twoDigits = Arrays.asList(message.getText().split("-"));
+        if (twoDigits.size() == 1) {
+            return replyMessageService.getTextMessage(chatId, "Введите два числа через -");
+        }
         try {
             int end = Integer.parseInt(twoDigits.get(1));
             System.out.printf(String.valueOf(end));
@@ -51,7 +54,7 @@ public class EnterPrice implements MessageHandler {
         }
 
 
-        return replyMessageService.getTextMessage(chatId, "Цена принята \nВведите нужные станции метро:");
+        return replyMessageService.getTextMessage(chatId, "Цена принята \nВведите нужные станции метро или поставте 0, если этот критерий не нужен:");
     }
 
 

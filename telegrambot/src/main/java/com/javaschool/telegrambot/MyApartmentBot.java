@@ -64,18 +64,13 @@ public class MyApartmentBot extends TelegramLongPollingBot {
         return sendMessage;
     }
 
-    public void  brodCastMessage(Wrapper wrap){
+    public void brodCastMessage(Wrapper wrap) {
         List<Long> chatsId = wrap.getChatIds();
         ObjectMapper objectMapper = new ObjectMapper();
         Advertisement add = wrap.getAdvertisement();
-        String text;
-        try {
-            text = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(add);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            text = "Error! Parsing Json";
-        }
-        for (Long chatId: chatsId) {
+        System.out.printf("12345");
+        String text = makePrettyString(add);
+        for (Long chatId : chatsId) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(String.valueOf(chatId));
             sendMessage.setText(text);
@@ -85,6 +80,11 @@ public class MyApartmentBot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String makePrettyString(Advertisement add) {
+        String pretty = add.getUrl() + "\n" + add.getAddress() + "\n" + add.getArea() + "м2" + "\n" + add.getImages().split(",")[0] + "\n" + add.getDescription() + '\n' + "комнат:" + add.getRoomsCount();
+        return pretty;
     }
 
     public void sendMessage(SendMessage sendMessage) {
